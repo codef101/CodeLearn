@@ -1,0 +1,103 @@
+<html>
+
+<head>
+    <title>React Basic Principles</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+
+
+    <script type="text/babel">
+
+        class StudentClassComponent extends React.Component {
+            render() {
+                return <div> My name is <em>{this.props.name}</em>, I study <em>{this.props.faculty}</em>. I was born {this.props.dob}</div>
+            }
+        }
+
+        StudentClassComponent.defaultProps = {
+            dob: '1 Jan 2000'
+        }
+
+        const StudentFunComponent = function ({ name, faculty }) {
+            return <div>[Fun Prop] My name is <em>{name}</em>, I study <em>{faculty}</em></div>
+        }
+
+        class TextAreaCounter extends React.Component {
+
+            constructor() {
+                super();
+                this.state = {};
+                // this.onTextChange = this.onTextChange.bind(this);
+            }
+
+            componentDidMount() {
+                console.log('componentDidMount');
+            }
+            componentWillUnmount() {
+                console.log('componentWillUnmount');
+            }
+            componentDidUpdate(prevProps, prevState, snapshot) {
+                console.log('componentDidUpdate ', prevProps, prevState, snapshot);
+            }
+            getSnapshotBeforeUpdate(prevProps, prevState) {
+                console.log('getSnapshotBeforeUpdate', prevProps, prevState);
+                return 'hello';
+            }
+            shouldComponentUpdate(newProps, newState) {
+                console.log('shouldComponentUpdate ', newProps, newState);
+                return true;
+            }
+            onTextChange(event) {
+                this.setState({
+                    text: event.target.value,
+                });
+            }
+
+            render() {
+                const text = 'text' in this.state ? this.state.text : this.props.text;
+                return (
+                    <div>
+                        <textarea
+                            defaultValue={text}
+                            onChange={this.onTextChange.bind(this)} />
+                        <h3>{text.length}</h3>
+                    </div>
+                )
+            }
+        }
+        TextAreaCounter.defaultProps = {
+            text: 'Count me as I type',
+        };
+
+        class MyPage extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <h1>Class Properties</h1>
+                        <StudentClassComponent name="Bobby Lee" faculty="Software Engineering" />
+                        <h1>Function Properties</h1>
+                        <StudentFunComponent name="Bobby Lee" faculty="Software Engineering" />
+                        <h1>TextAreaCounter Stateless Component</h1>
+                        <TextAreaCounter />
+                    </div>
+                )
+            }
+        }
+
+        window.onload = function () {
+            ReactDOM.render(
+                <MyPage />,
+                document.getElementById('root')
+            );
+        };
+
+    </script>
+</body>
+
+</html>
